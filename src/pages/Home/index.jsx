@@ -18,17 +18,17 @@ export function Home() {
             <Header />
 
             <Menu>
-                <li><ClickableText title="todos" /></li>
+                <li><ClickableText title="All" /></li>
                 <li><ClickableText title="nodejs" /></li>
                 <li><ClickableText title="react" /></li>
             </Menu>
 
             <Search>
-                <Input placeholder="Pesquisar pelo título" />
+                <Input placeholder="Search by title" />
             </Search>
 
             <Content>
-                <Section title="Minhas notas">
+                <Section title="My notes">
                     <Note data={
                         {
                             title: 'React',
@@ -45,7 +45,7 @@ export function Home() {
 
             <NewNote>
                 <FiPlus />
-                Criar nota
+                New Note
             </NewNote>
 
         </Container>
