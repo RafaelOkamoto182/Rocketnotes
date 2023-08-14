@@ -10,6 +10,16 @@ export const Container = styled.div`
     "header"
     "content";
 
+    .tags {
+        display: flex;
+        justify-content: space-between;
+        flex-wrap: wrap;
+    }
+
+    >main{
+        grid-area: content;
+        overflow-y: auto;
+    }
 `
 
 export const Form = styled.form`
