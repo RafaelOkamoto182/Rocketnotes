@@ -7,10 +7,17 @@ import { Input } from '../../components/Input'
 import { Button } from '../../components/Button'
 
 import { useAuth } from '../../hooks/auth'
+import { useState } from 'react'
 
 export function SignIn() {
-    const data = useAuth()
-    console.log(data)
+    const [email, setEmail] = useState("")
+    const [password, setPassword] = useState("")
+
+    const { signIn } = useAuth()
+
+    function handleSignInBtn() {
+        signIn({ email, password })
+    }
 
     return (
         <Container>
@@ -24,14 +31,16 @@ export function SignIn() {
                     placeholder="E-mail"
                     type="text"
                     icon={FiMail}
+                    onChange={event => setEmail(event.target.value)}
                 />
                 <Input
                     placeholder="Password"
                     type="password"
                     icon={FiLock}
+                    onChange={event => setPassword(event.target.value)}
                 />
 
-                <Button title="Sign In" />
+                <Button title="Sign In" onClick={handleSignInBtn} />
 
                 <Link to="/register">New Account</Link>
             </Form>
