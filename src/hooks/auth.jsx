@@ -27,6 +27,13 @@ function AuthProvider({ children }) {
         }
     }
 
+    function signOut() {
+        localStorage.removeItem("@rocketnotes:user")
+        localStorage.removeItem("@rocketnotes:token")
+
+        setAuthData({})
+    }
+
     //useEffect é sempre chamada após a renderização do componente. Pode ter um estado dependente em [], que também chama a useEffect 
     //qdo ele for mudado.
     //É utilizado dentro da funcao do componente para poder acessar os estados dele.
@@ -41,7 +48,11 @@ function AuthProvider({ children }) {
     }, [])
 
     return (
-        <AuthContext.Provider value={{ signIn, user: authData.user }}>
+        <AuthContext.Provider value={{
+            signIn,
+            signOut,
+            user: authData.user
+        }}>
             {children}
         </AuthContext.Provider>
     )
