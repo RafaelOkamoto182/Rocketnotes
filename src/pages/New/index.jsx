@@ -6,10 +6,19 @@ import { Section } from '../../components/Section'
 import { Button } from '../../components/Button'
 
 import { Link } from 'react-router-dom'
+import { useState } from 'react'
 
 import { Container, Form } from './styles'
 
 export function New() {
+    const [linkArray, setLinkArray] = useState([])
+    const [newLink, setNewLink] = useState("")
+
+    function handleAddLink() {
+        setLinkArray(prevState => [...prevState, newLink])
+        setNewLink("")
+    }
+
     return (
         <Container>
             <Header />
@@ -25,8 +34,22 @@ export function New() {
                     <TextArea placeholder="Details" />
 
                     <Section title="Useful Links">
-                        <NoteItem value="sitesitesite" />
-                        <NoteItem placeholder="New Link" isnew="true" />
+                        {
+                            linkArray.map((link, index) =>
+                                <NoteItem
+                                    key={String(index)}
+                                    value={link}
+                                    onClick={() => { }}
+                                />
+                            )
+                        }
+                        <NoteItem
+                            isnew="true"
+                            placeholder="New Link"
+                            value={newLink}
+                            onChange={e => setNewLink(e.target.value)}
+                            onClick={handleAddLink}
+                        />
                     </Section>
 
                     <Section title="Tags">
