@@ -44,6 +44,17 @@ export function New() {
     }
 
     async function handleSaveNote() {
+        if (!noteTitle) {
+            return alert("Please, add a title to your note")
+        }
+        if (newLink) {
+            return alert("There's a link to be added. Please, click the add button or leave the field blank")
+        }
+
+        if (newTag) {
+            return alert("There's a tag to be added. Please, click the add button or leave the field blank")
+        }
+
         await api.post("/note", {
             title: noteTitle,
             description: noteDescription,
