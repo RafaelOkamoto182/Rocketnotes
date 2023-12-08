@@ -9,12 +9,15 @@ import { Section } from '../../components/Section'
 import { Note } from '../../components/Note'
 import { useEffect, useState } from 'react'
 import { api } from '../../services/api'
+import { useNavigate } from 'react-router-dom'
 
 export function Home() {
     const [tagList, setTagList] = useState([])
     const [selectedTags, setSelectedTags] = useState([])
     const [searchBar, setSearchBar] = useState("")
     const [notes, setNotes] = useState([])
+
+    const navigate = useNavigate()
 
     function handleSelectedTags(tagName) {
         //se a tag clicada for o All, zera o vetor de tags, voltando a seleção pro All
@@ -29,6 +32,10 @@ export function Home() {
             setSelectedTags(prevState => [...prevState, tagName])
         }
 
+    }
+
+    function handleOpenNote(id) {
+        navigate(`/details/${id}`)
     }
 
     //o useEffect nao aceita um async na frente, entao precisa chamar uma async function caso queira fazer algo assincrono
@@ -51,7 +58,6 @@ export function Home() {
             } catch (error) {
                 console.log(error.message)
             }
-
         }
 
         fetchNotes()
@@ -102,6 +108,7 @@ export function Home() {
                             <Note
                                 key={note.id}
                                 data={note}
+                                onClick={() => handleOpenNote(note.id)}
                             />
                         ))
 
