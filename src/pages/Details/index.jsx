@@ -4,40 +4,72 @@ import { Header } from "../../components/Header"
 import { Section } from "../../components/Section"
 import { Tag } from "../../components/Tag/index.jsx"
 import { ClickableText } from "../../components/ClickableText/index.jsx"
+import { useNavigate, useParams } from "react-router-dom"
+import { useEffect, useState } from "react"
+import { api } from "../../services/api.js"
 
 
 export function Details() {
+  const params = useParams()
+  const [noteData, setData] = useState(null)
+  const navigate = useNavigate()
+
+  useEffect(() => {
+    async function fetchNoteById() {
+      const response = await api.get(`/note/${params.id}`)
+      setData(response.data)
+    }
+
+    fetchNoteById()
+  }, [])
   return (
     <Container>
       <Header />
 
-      <main>
-        <Content>
-          <ClickableText title="Delete note" />
+      {
+        noteData &&
+        <main>
+          <Content>
+            <ClickableText title="Delete note" />
 
-          <h1>Intro to React</h1>
+            <h1>{noteData.title}</h1>
 
-          <p>
-            Lorem ipsum dolor, sit amet consectetur adipisicing elit. Quia praesentium dignissimos labore pariatur suscipit ipsum, deleniti cupiditate impedit. Quos quasi fugit incidunt nulla aliquid quo officiis deserunt libero perferendis? Veniam?
-          </p>
+            <p>
+              {noteData.description}
+            </p>
 
-          <Section title="Useful links">
-            <Links>
-              <li><a href="#">https://www.rocketseat.com.br</a></li>
-              <li><a href="#">https://www.rocketseat.com.br</a></li>
-            </Links>
-          </Section>
+            {noteData.links &&
+              <Section title="Useful links">
+                <Links>
+                  {
+                    noteData.links.map(link => (
+                      <li key={String(link.id)}>
+                        <a href={link.url} target="_blank">
+                          {link.url}
+                        </a>
+                      </li>
+                    ))
+                  }
+                </Links>
+              </Section>
+            }
 
-          <Section title="Tags">
-            <Tag title="express" />
-            <Tag title="nodejs" />
-          </Section>
+            {
+              noteData.tags &&
+              <Section title="Tags">
+                {
+                  noteData.tags.map(tag => (
+                    <Tag key={tag.id} title={tag.name} />
+                  ))
+                }
 
-          <Button title="Back" />
+              </Section>
+            }
+            <Button title="Back" onClick={() => navigate("/")} />
 
-        </Content>
-      </main>
-
+          </Content>
+        </main>
+      }
     </Container>
   )
 }
