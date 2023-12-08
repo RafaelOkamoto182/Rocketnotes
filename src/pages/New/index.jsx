@@ -5,17 +5,25 @@ import { NoteItem } from '../../components/NoteItem'
 import { Section } from '../../components/Section'
 import { Button } from '../../components/Button'
 
+import { api } from '../../services/api'
+
 import { Link } from 'react-router-dom'
 import { useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 
 import { Container, Form } from './styles'
 
 export function New() {
+    const [noteTitle, setNoteTitle] = useState("")
+    const [noteDescription, setNoteDescription] = useState("")
+
     const [linkArray, setLinkArray] = useState([])
     const [newLink, setNewLink] = useState("")
 
     const [tagArray, setTagArray] = useState([])
     const [newTag, setNewTag] = useState("")
+
+    const navigate = useNavigate()
 
     function handleAddLink() {
         setLinkArray(prevState => [...prevState, newLink])
@@ -35,6 +43,18 @@ export function New() {
         setTagArray(prevState => prevState.filter(tag => tag !== tagToRemove))
     }
 
+    async function handleSaveNote() {
+        await api.post("/note", {
+            title: noteTitle,
+            description: noteDescription,
+            tags: tagArray,
+            links: linkArray
+        })
+
+        alert("Note crated successfully!")
+        navigate("/")
+    }
+
     return (
         <Container>
             <Header />
@@ -46,8 +66,8 @@ export function New() {
                         <Link to="/">Back</Link>
                     </header>
 
-                    <Input placeholder="Title" />
-                    <TextArea placeholder="Details" />
+                    <Input placeholder="Title" onChange={e => setNoteTitle(e.target.value)} />
+                    <TextArea placeholder="Description" onChange={e => setNoteDescription(e.target.value)} />
 
                     <Section title="Useful Links">
                         {
@@ -89,7 +109,7 @@ export function New() {
                         </div>
                     </Section>
 
-                    <Button title="Save" />
+                    <Button title="Save" onClick={handleSaveNote} />
 
 
 
