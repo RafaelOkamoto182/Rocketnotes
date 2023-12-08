@@ -31,6 +31,10 @@ export function New() {
         setNewTag("")
     }
 
+    function handleRemoveTag(tagToRemove) {
+        setTagArray(prevState => prevState.filter(tag => tag !== tagToRemove))
+    }
+
     return (
         <Container>
             <Header />
@@ -71,7 +75,7 @@ export function New() {
                                     <NoteItem
                                         key={String(index)}
                                         value={tag}
-                                        onClick={() => { }}
+                                        onClick={() => handleRemoveTag(tag)}
                                     />
                                 ))
                             }
