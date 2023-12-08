@@ -34,6 +34,24 @@ function AuthProvider({ children }) {
         setAuthData({})
     }
 
+    async function updateProfile({ user }) {
+        try {
+
+            await api.put("/user", user)
+            localStorage.setItem("@rocketnotes:user", JSON.stringify(user))
+
+            setAuthData({ user, token: authData.token })
+            alert("Profile updated successfully!")
+
+        } catch (error) {
+            if (error.response) {
+                alert(error.response.data.message)
+            } else {
+                alert("Unknown error. Unable to update user right now")
+            }
+        }
+    }
+
     //useEffect é sempre chamada após a renderização do componente. Pode ter um estado dependente em [], que também chama a useEffect 
     //qdo ele for mudado.
     //É utilizado dentro da funcao do componente para poder acessar os estados dele.
@@ -51,6 +69,7 @@ function AuthProvider({ children }) {
         <AuthContext.Provider value={{
             signIn,
             signOut,
+            updateProfile,
             user: authData.user
         }}>
             {children}
