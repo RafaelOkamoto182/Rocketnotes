@@ -1,11 +1,11 @@
 import { Container } from './styles'
 
-export function ClickableText({ title, isActive = false, ...rest }) {
+export function ClickableText({ title, isactive = false, ...rest }) {
 
     return (
         <Container
             type="button"
-            $isactive={isActive.toString()}
+            $isactive={isactive}
             {...rest}
         >
             {title}

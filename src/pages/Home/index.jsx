@@ -7,8 +7,56 @@ import { ClickableText } from '../../components/ClickableText'
 import { Input } from '../../components/Input'
 import { Section } from '../../components/Section'
 import { Note } from '../../components/Note'
+import { useEffect, useState } from 'react'
+import { api } from '../../services/api'
 
 export function Home() {
+    const [tagList, setTagList] = useState([])
+    const [selectedTags, setSelectedTags] = useState([])
+    const [searchBar, setSearchBar] = useState("")
+    const [notes, setNotes] = useState([])
+
+    function handleSelectedTags(tagName) {
+        //se a tag clicada for o All, zera o vetor de tags, voltando a seleção pro All
+        if (tagName === "All") {
+            return setSelectedTags([])
+        }
+
+        if (selectedTags.includes(tagName)) {
+            const filteredTags = selectedTags.filter(tag => tag !== tagName)
+            setSelectedTags(filteredTags)
+        } else {
+            setSelectedTags(prevState => [...prevState, tagName])
+        }
+
+    }
+
+    //o useEffect nao aceita um async na frente, entao precisa chamar uma async function caso queira fazer algo assincrono
+    useEffect(() => {
+        async function fetchTagList() {
+            const response = await api.get("/tag")
+            setTagList(response.data)
+        }
+
+        fetchTagList()
+
+    }, [])
+
+    useEffect(() => {
+
+        async function fetchNotes() {
+            try {
+                const response = await api.get(`/note?title=${searchBar}&tags=${selectedTags}`)
+                setNotes(response.data)
+            } catch (error) {
+                console.log(error.message)
+            }
+
+        }
+
+        fetchNotes()
+
+    }, [selectedTags, searchBar])
     return (
         <Container>
             <Brand>
@@ -18,26 +66,46 @@ export function Home() {
             <Header />
 
             <Menu>
-                <li><ClickableText title="All" /></li>
-                <li><ClickableText title="nodejs" /></li>
-                <li><ClickableText title="react" /></li>
+                <li>
+                    <ClickableText
+                        title="All"
+                        isactive={selectedTags.length === 0}
+                        onClick={() => handleSelectedTags("All")}
+                    />
+                </li>
+                {
+                    tagList && tagList.map(tag => (
+                        <li key={String(tag.id)}>
+                            <ClickableText
+                                title={tag.name}
+                                onClick={() => handleSelectedTags(tag.name)}
+                                isactive={selectedTags.includes(tag.name)}
+                            />
+                        </li>
+                    ))
+                }
+
             </Menu>
 
             <Search>
-                <Input placeholder="Search by title" />
+                <Input
+                    placeholder="Search by title"
+                    onChange={e => setSearchBar(e.target.value)}
+                />
             </Search>
 
             <Content>
                 <Section title="My notes">
-                    <Note data={
-                        {
-                            title: 'React',
-                            tags: [
-                                { id: '1', name: 'react' },
-                                { id: '2', name: 'frontend' }
-                            ]
-                        }
-                    } />
+
+                    {
+                        notes.map(note => (
+                            <Note
+                                key={note.id}
+                                data={note}
+                            />
+                        ))
+
+                    }
 
                 </Section>
 
