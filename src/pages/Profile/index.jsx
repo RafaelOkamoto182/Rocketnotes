@@ -27,12 +27,15 @@ export function Profile() {
     const [avatarFile, setAvatarFile] = useState(null)
 
     async function handleUpdate() {
-        const user = {
+        const updatedInfo = {
             name,
             email,
             password: newPassword,
             old_password: oldPassword
         }
+
+        //vai pegar tudo que foi atualizado e sobrescrever no que o user ja tinha. O resto fica igual (por exemplo, a foto)
+        const updatedUser = Object.assign(user, updatedInfo)
 
         await updateProfile({ user, avatarFile })
     }
