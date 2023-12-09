@@ -19,7 +19,7 @@ export function Details() {
 
     if (confirmation) {
       api.delete(`/note/${params.id}`)
-      navigate("/")
+      navigate(-1)
     }
   }
 
@@ -76,7 +76,7 @@ export function Details() {
 
               </Section>
             }
-            <Button title="Back" onClick={() => navigate("/")} />
+            <Button title="Back" onClick={() => navigate(-1)} />
 
           </Content>
         </main>

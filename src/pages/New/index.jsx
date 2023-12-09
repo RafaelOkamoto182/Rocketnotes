@@ -7,11 +7,11 @@ import { Button } from '../../components/Button'
 
 import { api } from '../../services/api'
 
-import { Link } from 'react-router-dom'
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 
 import { Container, Form } from './styles'
+import { ClickableText } from '../../components/ClickableText'
 
 export function New() {
     const [noteTitle, setNoteTitle] = useState("")
@@ -63,7 +63,7 @@ export function New() {
         })
 
         alert("Note crated successfully!")
-        navigate("/")
+        navigate(-1)
     }
 
     return (
@@ -74,7 +74,8 @@ export function New() {
                 <Form>
                     <header>
                         <h1>Create a note</h1>
-                        <Link to="/">Back</Link>
+
+                        <ClickableText title="Back" onClick={() => navigate(-1)} />
                     </header>
 
                     <Input placeholder="Title" onChange={e => setNoteTitle(e.target.value)} />
