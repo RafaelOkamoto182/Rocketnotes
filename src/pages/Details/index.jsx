@@ -14,6 +14,15 @@ export function Details() {
   const [noteData, setData] = useState(null)
   const navigate = useNavigate()
 
+  async function handleDelete() {
+    const confirmation = window.confirm("You really want to delete this note?")
+
+    if (confirmation) {
+      api.delete(`/note/${params.id}`)
+      navigate("/")
+    }
+  }
+
   useEffect(() => {
     async function fetchNoteById() {
       const response = await api.get(`/note/${params.id}`)
@@ -22,6 +31,8 @@ export function Details() {
 
     fetchNoteById()
   }, [])
+
+
   return (
     <Container>
       <Header />
@@ -30,7 +41,7 @@ export function Details() {
         noteData &&
         <main>
           <Content>
-            <ClickableText title="Delete note" />
+            <ClickableText title="Delete note" onClick={handleDelete} />
 
             <h1>{noteData.title}</h1>
 
